@@ -1,7 +1,15 @@
-import { View, TextInput, Button, StyleSheet, Modal } from "react-native";
+import {
+  View,
+  TextInput,
+  Button,
+  StyleSheet,
+  Modal,
+  Image,
+} from "react-native";
 import { useState } from "react";
 
-export default function GoalInput({ addGoalHandler, visible,onCancel }) {
+
+export default function GoalInput({ addGoalHandler, visible, onCancel }) {
   const [enteredGoalText, setEnteredGoalText] = useState("");
   function goalInputHandler(enteredText) {
     console.log(enteredText);
@@ -12,11 +20,11 @@ export default function GoalInput({ addGoalHandler, visible,onCancel }) {
     addGoalHandler(enteredGoalText);
     setEnteredGoalText("");
   }
- 
 
   return (
     <Modal visible={visible} animationType="slide">
       <View style={myStyles.inputContainer}>
+        <Image style={myStyles.image} source={require('../assets/images/goal.png')} />
         <TextInput
           style={myStyles.textInput}
           placeholder="Enter your course goal..."
@@ -25,11 +33,11 @@ export default function GoalInput({ addGoalHandler, visible,onCancel }) {
         />
         <View style={myStyles.buttonContainer}>
           <View>
-            <Button onPress={addGoalHandlerHere} title="Add goal" />
+            <Button onPress={addGoalHandlerHere} title="Add goal" color="#5180f0"/>
           </View>
 
           <View style={myStyles.button}>
-            <Button title="Cancel" onPress={onCancel}/>
+            <Button title="Cancel" onPress={onCancel} color="red"/>
           </View>
         </View>
       </View>
@@ -38,14 +46,18 @@ export default function GoalInput({ addGoalHandler, visible,onCancel }) {
 }
 
 const myStyles = StyleSheet.create({
+  image:{
+    width: 100,
+    height:100,
+    margin:20
+  },
   inputContainer: {
-    padding:16,
+    padding: 16,
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 24,
-    borderBottomWidth: 1,
-    borderBottomColor: "#cccccc",
+    
+    backgroundColor: '#311b6b'
   },
   textInput: {
     borderWidth: 1,
@@ -53,13 +65,17 @@ const myStyles = StyleSheet.create({
     width: "100%",
     marginRight: 8,
     padding: 8,
+    color:"white",
+    borderRadius:6,
+    padding:16
   },
   buttonContainer: {
     flexDirection: "row",
-    marginTop:16
+    marginTop: 16,
   },
   button: {
     width: 100,
     marginHorizontal: 8,
+    borderRadius:6
   },
 });
