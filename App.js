@@ -1,51 +1,40 @@
-import {
-  Button,
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  ScrollView,
-  FlatList,
-} from "react-native";
+import { StyleSheet, View, FlatList } from "react-native";
 import { useState } from "react";
-import { Logs } from "expo";
+
+import GoalItem from "./components/GoalItem";
+import GoalInput from "./components/GoalInputs";
 
 export default function App() {
-  const [enteredGoalText, setEnteredGoalText] = useState("");
   const [courseGoals, setCourseGoals] = useState([]);
-  function goalInputHandler(enteredText) {
-    // console.log(enteredText);
-    setEnteredGoalText(enteredText);
-  }
-  function addGoalHandler() {
-    console.log(enteredGoalText);
+ 
+  function addGoalHandler(enteredGoalText) {
+    // console.log(enteredGoalText);
     setCourseGoals((currentCourseGoals) => [
       ...currentCourseGoals,
       { text: enteredGoalText, id: Math.random().toString() },
     ]);
   }
+  function deleteGoalHandler(id){
+    // console.log("delete");
+    setCourseGoals(currentCourseGoals=>{
+      //true then keep, false then drop the item from array
+      return currentCourseGoals.filter((myGoal)=> myGoal.id !==id);
+    })
+  }
   return (
     <View style={myStyles.appContainer}>
-      <View style={myStyles.inputContainer}>
-        <TextInput
-          style={myStyles.textInput}
-          placeholder="Enter your course goal..."
-          onChangeText={goalInputHandler}
-        />
-        <Button onPress={addGoalHandler} title="Add goal" />
-      </View>
+      <GoalInput
+        addGoalHandler={addGoalHandler}
+      />
+
       <View style={myStyles.goalsContainer}>
         <FlatList
           data={courseGoals}
           renderItem={(itemData) => {
-            return (
-              <View style={myStyles.goalItem}>
-                <Text style={myStyles.goalText}>{itemData.item.text}</Text>
-              </View>
-            );
+            return <GoalItem id={itemData.item.id} text={itemData.item.text} deleteGoalHandler={deleteGoalHandler}/>;
           }}
-          keyExtractor={(item,index)=>{
-            return item.id
+          keyExtractor={(item, index) => {
+            return item.id;
           }}
           alwaysBounceVertical={false}
         />
@@ -61,15 +50,6 @@ const myStyles = StyleSheet.create({
     padding: 50,
     paddingHorizontal: 16,
   },
-  inputContainer: {
-    flexDirection: "row", //by default is "column"
-    flex: 1,
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 24,
-    borderBottomWidth: 1,
-    borderBottomColor: "#cccccc",
-  },
   textInput: {
     borderWidth: 1,
     borderColor: "#cccccc",
@@ -79,14 +59,5 @@ const myStyles = StyleSheet.create({
   },
   goalsContainer: {
     flex: 5,
-  },
-  goalItem: {
-    margin: 8,
-    borderRadius: 6,
-    padding: 6,
-    backgroundColor: "#5e0acc",
-  },
-  goalText: {
-    color: "white",
   },
 });
