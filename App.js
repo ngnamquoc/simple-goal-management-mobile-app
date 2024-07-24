@@ -1,4 +1,12 @@
-import { Button, StyleSheet, Text, View, TextInput } from "react-native";
+import {
+  Button,
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  ScrollView,
+  FlatList,
+} from "react-native";
 import { useState } from "react";
 import { Logs } from "expo";
 
@@ -13,7 +21,7 @@ export default function App() {
     console.log(enteredGoalText);
     setCourseGoals((currentCourseGoals) => [
       ...currentCourseGoals,
-      enteredGoalText,
+      { text: enteredGoalText, id: Math.random().toString() },
     ]);
   }
   return (
@@ -27,14 +35,20 @@ export default function App() {
         <Button onPress={addGoalHandler} title="Add goal" />
       </View>
       <View style={myStyles.goalsContainer}>
-        {courseGoals.map((goal, index) => (
-          
-         <View key={index} style={myStyles.goalItem}>
-            <Text  style={myStyles.goalText}>
-              {goal}
-            </Text>
-         </View>
-        ))}
+        <FlatList
+          data={courseGoals}
+          renderItem={(itemData) => {
+            return (
+              <View style={myStyles.goalItem}>
+                <Text style={myStyles.goalText}>{itemData.item.text}</Text>
+              </View>
+            );
+          }}
+          keyExtractor={(item,index)=>{
+            return item.id
+          }}
+          alwaysBounceVertical={false}
+        />
       </View>
     </View>
   );
@@ -72,7 +86,7 @@ const myStyles = StyleSheet.create({
     padding: 6,
     backgroundColor: "#5e0acc",
   },
-  goalText:{
-    color:"white"
-  }
+  goalText: {
+    color: "white",
+  },
 });
